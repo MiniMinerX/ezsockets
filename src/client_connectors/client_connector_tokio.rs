@@ -51,7 +51,21 @@ impl ClientConnector for ClientConnectorTokio {
     /// Returns `Err` if the request is invalid.
     async fn connect(&self, config: &ClientConfig) -> Result<Self::Socket, Self::WSError> {
         let request = config.connect_http_request();
-        let (socket, _) = tokio_tungstenite::connect_async(request).await?;
+
+        let custom_ws_config = WebSocketConfig {
+            read_buffer_size: 128 * 1024,
+            write_buffer_size: 128 * 1024,
+            max_write_buffer_size: usize::MAX,
+            max_message_size: Some(1024 << 20),
+            max_frame_size: Some(256 << 20),
+            accept_unmasked_frames: false,
+        };
+        
+        let (socket, _) = tokio_tungstenite::connect_async_with_config(
+            request,
+            Some(custom_ws_config),
+            false,
+        ).await?;
         Ok(socket)
     }
 }
