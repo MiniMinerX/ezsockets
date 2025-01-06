@@ -54,7 +54,7 @@ impl ClientConnector for ClientConnectorTokio {
         let request = config.connect_http_request();
 
         let custom_ws_config = WebSocketConfig {
-            read_buffer_size: 128 * 1024,
+            max_send_queue: None,
             write_buffer_size: 128 * 1024,
             max_write_buffer_size: usize::MAX,
             max_message_size: Some(1024 << 20),
