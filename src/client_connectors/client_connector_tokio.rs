@@ -1,6 +1,7 @@
 use crate::client::{ClientConfig, ClientConnector};
 use enfync::TryAdopt;
 use tokio_tungstenite::tungstenite;
+use tungstenite::protocol::WebSocketConfig;
 
 /// Implementation of [`ClientConnector`] for tokio runtimes.
 #[derive(Clone)]
